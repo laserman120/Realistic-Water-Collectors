@@ -40,10 +40,10 @@ public class FireProximityTrigger : MonoBehaviour
     private HashSet<Collider> nearbyFireElements = new HashSet<Collider>(); // Use HashSet for fast lookups
     private float proximityRadius = 1.5f;
 
-    private float checkInterval = 30f;
+    private float checkInterval = 20f;
     private float timer = 0f;
     private RainCatcher _rainCatcher;
-
+    private SeasonsManager _seasonsManager;
     private void Start()
     {
         timer = Random.Range(0f, checkInterval); // Randomize initial check time
@@ -61,6 +61,7 @@ public class FireProximityTrigger : MonoBehaviour
         {
             RLog.Error("RainCatcher not found on RainCatcherInteraction child of FireProximityTrigger");
         }
+        _seasonsManager = FindObjectOfType<SeasonsManager>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -105,6 +106,7 @@ public class FireProximityTrigger : MonoBehaviour
 
     private void Update()
     {
+        if (_seasonsManager._activeSeason != SeasonsManager.Season.Winter) return;
         timer += Time.deltaTime;
         if (timer >= checkInterval)
         {
@@ -124,6 +126,7 @@ public class FireProximityTrigger : MonoBehaviour
         }
     }
 
+
     private int GetFireElementCount()
     {
         return nearbyFireElements.Count;
@@ -132,6 +135,7 @@ public class FireProximityTrigger : MonoBehaviour
 
 public class Realistic_Water_Collectors : SonsMod, IOnGameActivatedReceiver
 {
+    private static bool _firstRun = true;
     public Realistic_Water_Collectors()
     {
     }
@@ -152,6 +156,12 @@ public class Realistic_Water_Collectors : SonsMod, IOnGameActivatedReceiver
 
     public void OnGameActivated()
     {
-        ConstructionTools.GetRecipe(56)._builtPrefab.AddComponent<FireProximityTrigger>();
+        if (_firstRun)
+        {
+            ConstructionTools.GetRecipe(56)._builtPrefab.AddComponent<FireProximityTrigger>();
+            _firstRun = false;
+        }
+        
+
     }
 }
