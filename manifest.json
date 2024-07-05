@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/ToniMacaroni/RedLoader/main/MetadataSchema.json",
+  "id": "Realistic_Water_Collectors",
+  "author": "GLaD0S",
+  "version": "1.0.0",
+  "description": "Allows the ice inside RainCatchers to melt when near a fire",
+  "gameVersion": "1.0.0",
+  "type": "Mod",
+  "url": "..."
+}
